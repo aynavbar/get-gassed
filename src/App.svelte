@@ -44,7 +44,7 @@
           isExiting = false
         }}
     >{compliment}</p>
-    <div class="controls-container pixelify-sans-400">
+    <div class="controls-container">
         <button disabled={isExiting} onclick={generateCompliment}>Get gassed</button>
         <ul>
             {#each categories as category (category)}
@@ -102,6 +102,9 @@
         background-color: transparent;
         color: white;
         cursor: pointer;
+        font-family: "Jersey 25", sans-serif;
+        font-weight: 400;
+        font-style: normal;
     }
 
     button.selected {
@@ -143,7 +146,7 @@
         padding-inline: 30px;
         padding-block: 10px;
         background-color: #4b4bff;
-        font-size: 1.2rem;
+        font-size: 1.5rem;
         border: none;
         font-weight: normal;
     }
@@ -171,7 +174,7 @@
     ul button {
         width: 100%;
         height: 100%;
-        font-size: 1rem;
+        font-size: 1.2rem;
         color: #000000;
         border-color: #000000;
         border-radius: 6px;
