@@ -113,6 +113,63 @@ const complimentsList = {
   ],
 };
 
-const categories = Array.from(Object.keys(complimentsList));
 
-export { complimentsList, categories };
+/**
+ *
+ * @param {string} str
+ * @returns string
+ */
+
+function camelToSentenceCase(str) {
+  const trimmed = str.trim() // prevents a bug where the first alphanumeric character is removed when there are one or more spaces at the beginning of the string
+  const capitalizedChars = Array.from(trimmed.matchAll(/[A-Z]/g));
+  const indices = capitalizedChars.map((item) => item.index) // the indices of the capitalized letters
+  let result = "" // for reconstructing the string in sentence case
+
+  for (let i = 0; i < trimmed.length; i++) {
+    if (indices.includes(i)) {
+      result += ` ${trimmed[i].toLowerCase()}`
+    } else {
+      result += trimmed[i]
+    }
+  }
+
+  const lastIndex = result.length - 1;
+
+  result = result.replace(result[0], result[0].toUpperCase()); // turn the first character to lowercase
+  result = result.replace(result[lastIndex], result[lastIndex].toLowerCase()); // turn the last character to lowercase
+
+  return result;
+}
+
+/**
+ *
+ * @param {string} str
+ * @returns string
+ *
+ */
+
+function sentenceToCamelCase(str) {
+  const trimmed = str.trim() // prevents a bug where the first alphanumeric character is removed when there are one or more spaces at the beginning of the string
+  const capitalizedChars = Array.from(trimmed.matchAll(/\s+[a-z]/g));
+  const indices = capitalizedChars.map((item) => item.index) // the indices of the capitalized letters
+  let result = "" // for reconstructing the string in camelCase
+
+  for (let i = 0; i < trimmed.length; i++) {
+    if (indices.includes(i) && i !== 0) { // remove the space, capitalize the next character and add it
+      result += trimmed[i + 1].toUpperCase();
+    } else if (trimmed[i-1] !== " ") { // skip the character since it was already added
+      result += trimmed[i];
+    }
+  }
+
+  const lastIndex = result.length - 1;
+
+  result = result.replace(result[0], result[0].toLowerCase()); // turn the first character to lowercase
+  result = result.replace(result[lastIndex], result[lastIndex].toLowerCase()); // turn the last character to lowercase
+  return result;
+}
+
+const categories = Array.from(Object.keys(complimentsList)).map((item) => camelToSentenceCase(item));
+
+export { complimentsList, categories, sentenceToCamelCase };

@@ -1,9 +1,9 @@
 <script>
     import { onMount } from "svelte";
-    import { complimentsList, categories } from "./lib/compliments";
+    import { complimentsList, categories, sentenceToCamelCase } from "./lib/compliments";
 
     let compliment = $state("");
-    let selectedCategory = $state(categories[0]); // defaults to the first category of compliments
+    let selectedCategory = $state(sentenceToCamelCase(categories[0])); // defaults to the first category of compliments
     let isExiting = $state(false);
 
     function generateCompliment() {
@@ -12,11 +12,11 @@
       // picks a random compliment from the `complimentList` store
       if (selectedCategory !== "random") {
         const index = Math.floor(Math.random() * complimentsList[selectedCategory].length);
-        compliment = complimentsList[selectedCategory][index];
+        compliment = complimentsList[sentenceToCamelCase(selectedCategory)][index];
         return
       }
       // generate a random phrase from a random category
-      const randomCategory = categories[(Math.floor(Math.random() * categories.length))];
+      const randomCategory = sentenceToCamelCase(categories[(Math.floor(Math.random() * categories.length))]);
       const index = Math.floor(Math.random() * complimentsList[randomCategory].length);
       compliment = complimentsList[randomCategory][index];
     }
@@ -37,20 +37,14 @@
             {#each categories as category (category)}
                 <li><button
                     onclick={() => {
-                      if (selectedCategory === category) {
+                      if (selectedCategory === sentenceToCamelCase(category)) {
                         selectedCategory = "random"
                         return
                       }
-
-                      selectedCategory = category
+                      selectedCategory = sentenceToCamelCase(category);
                     }}
-                    class="{selectedCategory === category ? 'selected' : ''}"
-                >{{
-                  general: "General",
-                  workEthic: "Work ethic",
-                  creativity: "Creativity",
-                  devCode: "Writing code"
-                }[category]}</button></li>
+                    class="{selectedCategory === sentenceToCamelCase(category) ? 'selected' : ''}"
+                >{category}</button></li>
             {/each}
         </ul>
     </div>
