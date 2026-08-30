@@ -12,7 +12,7 @@
       // picks a random compliment from the `complimentList` store
       if (selectedCategory !== "random") {
         const index = Math.floor(Math.random() * complimentsList[selectedCategory].length);
-        compliment = complimentsList[sentenceToCamelCase(selectedCategory)][index];
+        compliment = complimentsList[selectedCategory][index];
         return
       }
       // generate a random phrase from a random category
@@ -37,13 +37,14 @@
             {#each categories as category (category)}
                 <li><button
                     onclick={() => {
-                      if (selectedCategory === sentenceToCamelCase(category)) {
+                      const categoryInCamelCase = sentenceToCamelCase(category); // convert to coresponding object keys
+                      if (selectedCategory === categoryInCamelCase) {
                         selectedCategory = "random"
                         return
                       }
-                      selectedCategory = sentenceToCamelCase(category);
+                      selectedCategory = categoryInCamelCase;
                     }}
-                    class="{selectedCategory === sentenceToCamelCase(category) ? 'selected' : ''}"
+                    class="{selectedCategory === categoryInCamelCase ? 'selected' : ''}"
                 >{category}</button></li>
             {/each}
         </ul>
