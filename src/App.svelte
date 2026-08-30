@@ -44,7 +44,7 @@
                       }
                       selectedCategory = categoryInCamelCase;
                     }}
-                    class="{selectedCategory === categoryInCamelCase ? 'selected' : ''}"
+                    class="{selectedCategory === sentenceToCamelCase(category) ? 'selected' : ''}"
                 >{category}</button></li>
             {/each}
         </ul>
