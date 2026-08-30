@@ -7,9 +7,9 @@
     let isExiting = $state(false);
 
     function generateCompliment() {
-      // picks a random compliment from the `complimentList` store
+      isExiting = true // start the intermediate animation between generations
 
-      isExiting = true
+      // picks a random compliment from the `complimentList` store
       if (selectedCategory !== "random") {
         const index = Math.floor(Math.random() * complimentsList[selectedCategory].length);
         compliment = complimentsList[selectedCategory][index];
@@ -25,9 +25,12 @@
 </script>
 
 <main>
-    <p class="{isExiting ? 'slide' : ''}" onanimationend={() => {
-      isExiting = false
-    }}>{compliment}</p>
+    <p
+        class="{isExiting ? 'slide' : ''}"
+        onanimationend={() => {
+          isExiting = false
+        }}
+    >{compliment}</p>
     <div class="controls-container">
         <button disabled={isExiting} onclick={generateCompliment}>Get gassed</button>
         <ul>
@@ -83,6 +86,8 @@
         width: fit-content;
         margin: auto;
         font-size: 2rem;
+        padding-inline: 30px;
+        word-wrap: break-word;
     }
 
     p.slide {
