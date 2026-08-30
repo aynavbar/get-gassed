@@ -113,4 +113,6 @@ const complimentsList = {
   ],
 };
 
-export { complimentsList };
+const categories = Array.from(Object.keys(complimentsList));
+
+export { complimentsList, categories };
