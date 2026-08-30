@@ -29,7 +29,7 @@
       isExiting = false
     }}>{compliment}</p>
     <div class="controls-container">
-        <button onclick={generateCompliment}>Get gassed</button>
+        <button disabled={isExiting} onclick={generateCompliment}>Get gassed</button>
         <ul>
             {#each categories as category (category)}
                 <li><button
@@ -83,16 +83,20 @@
         width: fit-content;
         margin: auto;
         font-size: 2rem;
-        transition: transform 0.2s ease;
     }
 
     p.slide {
-        animation: fade-out-in 0.3s ease-in-out;
+        animation: fade-out-in;
+        animation-duration: 300ms;
     }
 
     @keyframes fade-out-in {
-        2% {
-            opacity: 2%;
+        0% {
+            opacity: 0%;
+        }
+
+        50% {
+            opacity: 10%;
         }
 
         100% {
