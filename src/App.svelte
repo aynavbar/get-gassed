@@ -39,12 +39,12 @@
         <img src="{serenePool}" alt="{altTexts[serenePool]}">
     </div>
     <p
-        class="{isExiting ? 'slide' : ''}"
+        class="{isExiting ? 'slide' : ''} pixelify-sans-400"
         onanimationend={() => {
           isExiting = false
         }}
     >{compliment}</p>
-    <div class="controls-container">
+    <div class="controls-container pixelify-sans-400">
         <button disabled={isExiting} onclick={generateCompliment}>Get gassed</button>
         <ul>
             {#each categories as category (category)}
@@ -101,7 +101,6 @@
         border-radius: 10px;
         background-color: transparent;
         color: white;
-        font-size: 1rem;
         cursor: pointer;
     }
 
@@ -114,7 +113,7 @@
         position: fixed;
         width: fit-content;
         margin: auto;
-        font-size: 2.5rem;
+        font-size: 3rem;
         font-weight: 600;
         text-align: center;
         padding-inline: 30px;
@@ -144,7 +143,7 @@
         padding-inline: 30px;
         padding-block: 10px;
         background-color: #4b4bff;
-        font-size: 0.9rem;
+        font-size: 1.2rem;
         border: none;
         font-weight: normal;
     }
@@ -172,7 +171,7 @@
     ul button {
         width: 100%;
         height: 100%;
-        font-size: 0.9rem;
+        font-size: 1rem;
         color: #000000;
         border-color: #000000;
         border-radius: 6px;
