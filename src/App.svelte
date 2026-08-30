@@ -2,6 +2,16 @@
     import { onMount } from "svelte";
     import { complimentsList, categories, sentenceToCamelCase } from "./lib/compliments";
 
+    // load background images
+    import cherryBlossoms from "./lib/assets/1711593.gif";
+    import mountains from "./lib/assets/8351324.gif";
+    import botanicCorner from "./lib/assets/8351249.gif";
+    import street from "./lib/assets/8351224.gif";
+    import serenePool from "./lib/assets/8351171.gif";
+
+    const altTexts = {}
+    altTexts[serenePool] = "A pixelated lake reflecting the sky above as it streaks with shooting stars"
+
     let compliment = $state("");
     let selectedCategory = $state(sentenceToCamelCase(categories[0])); // defaults to the first category of compliments
     let isExiting = $state(false);
@@ -25,6 +35,9 @@
 </script>
 
 <main>
+    <div class="background-image-container">
+        <img src="{serenePool}" alt="{altTexts[serenePool]}">
+    </div>
     <p
         class="{isExiting ? 'slide' : ''}"
         onanimationend={() => {
@@ -48,6 +61,13 @@
                 >{category}</button></li>
             {/each}
         </ul>
+        <!-- <ul class="background-buttons">
+            <li><button>Background</button></li>
+            <li><button>Background</button></li>
+            <li><button>Background</button></li>
+            <li><button>Background</button></li>
+            <li><button>Background</button></li>
+        </ul> TODO: implement background switcher -->
     </div>
 </main>
 
@@ -59,7 +79,21 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: #9dff8d;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .background-image-container {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .background-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
     }
 
     button {
@@ -80,7 +114,9 @@
         position: fixed;
         width: fit-content;
         margin: auto;
-        font-size: 2rem;
+        font-size: 2.5rem;
+        font-weight: 600;
+        text-align: center;
         padding-inline: 30px;
         word-wrap: break-word;
     }
@@ -141,4 +177,12 @@
         border-color: #000000;
         border-radius: 6px;
     }
+
+    /*ul.background-buttons {
+        position: fixed;
+        left: 20px;
+        bottom: 40px;
+        display: flex;
+        padding-block-start: 0;
+    }*/
 </style>
