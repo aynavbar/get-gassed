@@ -19,60 +19,64 @@
     let compliment = $state("");
     let displayedImage = $state(serenePool);
     let selectedCategory = $state(sentenceToCamelCase(categories[0])); // defaults to the first category of compliments
-    let imageChanged = $state(false); // whether the user has selected another image or not
 
     /**
      * @type HTMLImageElement
      */
-    let bgImage = $state();
+    let bgImageRef = $state();
 
     /**
-     * @type HTMLParagraphElement
+     * @type HTMLParagraphText
      */
-    let complimentText = $state();
+    let complimentParagraphRef = $state();
 
     function generateCompliment() {
-      if (!document.startViewTransition) {
-        if (complimentText) {
-          complimentText.innerText = compliment; // fallback: no animation
-          return;
-        }
+      const getRandomIndex = (category) => {
+        return Math.floor(Math.random() * complimentsList[category].length)
       }
-      document.startViewTransition(() => {
-        complimentText.innerText = compliment;
-      });
 
       // picks a random compliment from the `complimentList` store
       if (selectedCategory !== "random") {
-        const index = Math.floor(Math.random() * complimentsList[selectedCategory].length);
+        const index = getRandomIndex(selectedCategory);
         compliment = complimentsList[selectedCategory][index];
         return
       }
       // generate a random phrase from a random category
       const randomCategory = sentenceToCamelCase(categories[(Math.floor(Math.random() * categories.length))]);
-      const index = Math.floor(Math.random() * complimentsList[randomCategory].length);
+      const index = getRandomIndex(randomCategory);
       compliment = complimentsList[randomCategory][index];
     }
 
-    onMount(() => generateCompliment()) // generate a compliment when the page loads
+    onMount(generateCompliment) // generate a compliment when the page loads
+    $effect(() => {
+      if (compliment && complimentParagraphRef) {
+        if (!document.startViewTransition) {
+          complimentParagraphRef.innerText = compliment; // fallback: no animation
+          return;
+        }
+        document.startViewTransition(() => {
+          complimentParagraphRef.innerText = compliment;
+        });
+      }
+    })
 </script>
 
 <main>
     <div class="background-image-container">
         <img
-            bind:this={bgImage}
+            bind:this={bgImageRef}
             src="{serenePool}"
             alt="{altTexts[serenePool]}"
         >
     </div>
     <p
-        bind:this={complimentText}
+        bind:this={complimentParagraphRef}
         class="pixelify-sans-400"
     ></p>
     <div class="controls-container">
         <button onclick={generateCompliment}>Get gassed</button>
         <ul>
-            {#each categories as category (category)}
+            {#each categories as category}
                 <li><button
                     onclick={() => {
                       const categoryInCamelCase = sentenceToCamelCase(category); // convert to coresponding object keys
@@ -88,19 +92,18 @@
         </ul>
         <div class="background-buttons-container">
             <ul class="background-buttons">
-                {#each Array.from(Object.keys(altTexts)) as imageSrc}
+                {#each Object.keys(altTexts) as imageSrc}
                     <li>
                         <button
                             onclick={() => {
                               if (!document.startViewTransition) {
-                                  bgImage.src = imageSrc; // fallback: no animation
-                                  return;
-                                }
-                                document.startViewTransition(() => {
-                                  bgImage.src = imageSrc;
-                                });
-
-                                displayedImage = imageSrc
+                                bgImageRef.src = imageSrc; // fallback: no animation
+                                return;
+                              }
+                              document.startViewTransition(() => {
+                                bgImageRef.src = imageSrc;
+                              });
+                              displayedImage = imageSrc
                             }}
                             class="{imageSrc === displayedImage ? 'selected-image' : ''}"
                         >
@@ -116,7 +119,7 @@
 <style>
     main {
         width: 100vw;
-        height: 100dvh;
+        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -139,9 +142,15 @@
         user-select: none;
     }
 
-    .background-image-container img:nth-child(2) {
-        position: absolute;
-        top: 0;
+    p {
+        position: fixed;
+        width: fit-content;
+        margin: auto;
+        font-size: 1.6rem;
+        font-weight: 600;
+        text-align: center;
+        padding-inline: 30px;
+        word-wrap: break-word;
     }
 
     button {
@@ -164,15 +173,12 @@
         color: #fff;
     }
 
-    p {
-        position: fixed;
-        width: fit-content;
-        margin: auto;
-        font-size: 1.6rem;
-        font-weight: 600;
-        text-align: center;
-        padding-inline: 30px;
-        word-wrap: break-word;
+    .controls-container {
+        position: absolute;
+        bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .controls-container > button {
@@ -182,14 +188,6 @@
         font-size: 1.5rem;
         border: none;
         font-weight: normal;
-    }
-
-    .controls-container {
-        position: absolute;
-        bottom: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
     }
 
     ul {
