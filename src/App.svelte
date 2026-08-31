@@ -10,11 +10,18 @@
     import serenePool from "./lib/assets/8351171.gif";
 
     const altTexts = {}
-    altTexts[serenePool] = "A pixelated lake reflecting the sky above as it streaks with shooting stars"
+    altTexts[serenePool] = "pixelated lake reflecting the sky above as it streaks with shooting stars"
+    altTexts[street] = "pixelated street leading into a highway"
+    altTexts[botanicCorner] = "pixelated corner of a house filled with various houseplants and a cat sitting on the window sill"
+    altTexts[mountains] = "pixelated wide shot of a man looking at the mountains"
+    altTexts[cherryBlossoms] = "pixelated cherry blossoms next to a busy roadbridge"
 
     let compliment = $state("");
     let selectedCategory = $state(sentenceToCamelCase(categories[0])); // defaults to the first category of compliments
-    let isExiting = $state(false);
+    let isExiting = $state(false); // whether the text is changing or not
+    let imageChanged = $state(false); // whether the user has selected another image or not
+    let displayedImage = $state(serenePool); // keep track of the new image
+    let previousImage = $state(serenePool); // keep track of the old image
 
     function generateCompliment() {
       isExiting = true // start the intermediate animation between generations
@@ -36,10 +43,24 @@
 
 <main>
     <div class="background-image-container">
-        <img src="{serenePool}" alt="{altTexts[serenePool]}">
+        <img
+            src="{previousImage}"
+            alt="{altTexts[previousImage]}"
+        >
+        {#if imageChanged}
+            <img
+                class="fade-in"
+                src="{displayedImage}"
+                alt="{altTexts[displayedImage]}"
+                onanimationend={() => {
+                  imageChanged = false
+                  previousImage = displayedImage
+                }}
+            >
+        {/if}
     </div>
     <p
-        class="{isExiting ? 'slide' : ''} pixelify-sans-400"
+        class="{isExiting ? 'fade-in' : ''} pixelify-sans-400"
         onanimationend={() => {
           isExiting = false
         }}
@@ -61,13 +82,21 @@
                 >{category}</button></li>
             {/each}
         </ul>
-        <!-- <ul class="background-buttons">
-            <li><button>Background</button></li>
-            <li><button>Background</button></li>
-            <li><button>Background</button></li>
-            <li><button>Background</button></li>
-            <li><button>Background</button></li>
-        </ul> TODO: implement background switcher -->
+        <ul class="background-buttons">
+            {#each Array.from(Object.keys(altTexts)) as imageSrc}
+                <li>
+                    <button
+                        onclick={() => {
+                          displayedImage = imageSrc
+                          imageChanged = true
+                        }}
+                        class="{imageSrc === displayedImage ? 'selected-image' : ''}"
+                    >
+                        <img src={imageSrc} alt="{altTexts[imageSrc]}">
+                    </button>
+                </li>
+            {/each}
+        </ul>
     </div>
 </main>
 
@@ -96,6 +125,16 @@
         display: block;
     }
 
+    .background-image-container img:nth-child(2) {
+        position: absolute;
+        top: 0;
+    }
+
+    .background-image-container img.fade-in {
+        animation: fade-in;
+        animation-duration: 300ms;
+    }
+
     button {
         border: 3px solid;
         border-radius: 10px;
@@ -105,6 +144,10 @@
         font-family: "Jersey 25", sans-serif;
         font-weight: 400;
         font-style: normal;
+    }
+
+    button:focus-visible {
+        outline: 2px #fff solid;
     }
 
     button.selected {
@@ -123,12 +166,12 @@
         word-wrap: break-word;
     }
 
-    p.slide {
-        animation: fade-out-in;
+    p.fade-in {
+        animation: fade-in;
         animation-duration: 300ms;
     }
 
-    @keyframes fade-out-in {
+    @keyframes fade-in {
         0% {
             opacity: 0%;
         }
@@ -180,11 +223,31 @@
         border-radius: 6px;
     }
 
-    /*ul.background-buttons {
+    ul.background-buttons {
         position: fixed;
         left: 20px;
         bottom: 40px;
         display: flex;
         padding-block-start: 0;
-    }*/
+        width: 300px;
+        height: 50px;
+    }
+
+    ul.background-buttons button {
+        width: 60px;
+        height: 40px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    ul.background-buttons button img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+    }
+
+    ul.background-buttons button.selected-image {
+        border-color: #ffffff;
+    }
 </style>
