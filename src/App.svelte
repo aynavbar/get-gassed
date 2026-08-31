@@ -17,11 +17,15 @@
     altTexts[cherryBlossoms] = "pixelated cherry blossoms next to a busy roadbridge"
 
     let compliment = $state("");
+    let displayedImage = $state(serenePool);
     let selectedCategory = $state(sentenceToCamelCase(categories[0])); // defaults to the first category of compliments
     let isExiting = $state(false); // whether the text is changing or not
     let imageChanged = $state(false); // whether the user has selected another image or not
-    let displayedImage = $state(serenePool); // keep track of the new image
-    let previousImage = $state(serenePool); // keep track of the old image
+
+    /**
+     * @type HTMLImageElement
+     */
+    let bgImage = $state();
 
     function generateCompliment() {
       isExiting = true // start the intermediate animation between generations
@@ -44,20 +48,10 @@
 <main>
     <div class="background-image-container">
         <img
-            src="{previousImage}"
-            alt="{altTexts[previousImage]}"
+            bind:this={bgImage}
+            src="{serenePool}"
+            alt="{altTexts[serenePool]}"
         >
-        {#if imageChanged}
-            <img
-                class="fade-in"
-                src="{displayedImage}"
-                alt="{altTexts[displayedImage]}"
-                onanimationend={() => {
-                  imageChanged = false
-                  previousImage = displayedImage
-                }}
-            >
-        {/if}
     </div>
     <p
         class="{isExiting ? 'fade-in' : ''} pixelify-sans-400"
@@ -88,8 +82,15 @@
                     <li>
                         <button
                             onclick={() => {
-                              displayedImage = imageSrc
-                              imageChanged = true
+                              if (!document.startViewTransition) {
+                                  bgImage.src = imageSrc; // fallback: no animation
+                                  return;
+                                }
+                                document.startViewTransition(() => {
+                                  bgImage.src = imageSrc;
+                                });
+
+                                displayedImage = imageSrc
                             }}
                             class="{imageSrc === displayedImage ? 'selected-image' : ''}"
                         >
@@ -131,11 +132,6 @@
     .background-image-container img:nth-child(2) {
         position: absolute;
         top: 0;
-    }
-
-    .background-image-container img.fade-in {
-        animation: fade-in;
-        animation-duration: 300ms;
     }
 
     button {
@@ -270,9 +266,6 @@
             top: 40px;
             left: 0;
             padding-inline: 10px
-        }
-        ul.background-buttons {
-
         }
     }
 
