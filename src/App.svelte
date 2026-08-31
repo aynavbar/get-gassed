@@ -125,6 +125,7 @@
         height: 100%;
         object-fit: cover;
         display: block;
+        user-select: none;
     }
 
     .background-image-container img:nth-child(2) {
@@ -254,6 +255,7 @@
         width: 100%;
         height: 100%;
         object-fit: fill;
+        user-select: none;
     }
 
     ul.background-buttons button.selected-image {
