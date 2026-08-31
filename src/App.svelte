@@ -82,21 +82,23 @@
                 >{category}</button></li>
             {/each}
         </ul>
-        <ul class="background-buttons">
-            {#each Array.from(Object.keys(altTexts)) as imageSrc}
-                <li>
-                    <button
-                        onclick={() => {
-                          displayedImage = imageSrc
-                          imageChanged = true
-                        }}
-                        class="{imageSrc === displayedImage ? 'selected-image' : ''}"
-                    >
-                        <img src={imageSrc} alt="{altTexts[imageSrc]}">
-                    </button>
-                </li>
-            {/each}
-        </ul>
+        <div class="background-buttons-container">
+            <ul class="background-buttons">
+                {#each Array.from(Object.keys(altTexts)) as imageSrc}
+                    <li>
+                        <button
+                            onclick={() => {
+                              displayedImage = imageSrc
+                              imageChanged = true
+                            }}
+                            class="{imageSrc === displayedImage ? 'selected-image' : ''}"
+                        >
+                            <img src={imageSrc} alt="{altTexts[imageSrc]}">
+                        </button>
+                    </li>
+                {/each}
+            </ul>
+        </div>
     </div>
 </main>
 
@@ -159,7 +161,7 @@
         position: fixed;
         width: fit-content;
         margin: auto;
-        font-size: 3rem;
+        font-size: 1.6rem;
         font-weight: 600;
         text-align: center;
         padding-inline: 30px;
@@ -223,14 +225,21 @@
         border-radius: 6px;
     }
 
-    ul.background-buttons {
+    .background-buttons-container {
         position: fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         left: 20px;
         bottom: 40px;
+    }
+
+    ul.background-buttons {
         display: flex;
+        align-items: center;
         padding-block-start: 0;
-        width: 300px;
         height: 50px;
+        overflow-x: auto;
     }
 
     ul.background-buttons button {
@@ -249,5 +258,25 @@
 
     ul.background-buttons button.selected-image {
         border-color: #ffffff;
+    }
+
+    @media (max-width: 958px) {
+        .background-buttons-container {
+            width: 100vw;
+            height: fit-content;
+            overflow-x: hidden;
+            top: 40px;
+            left: 0;
+            padding-inline: 10px
+        }
+        ul.background-buttons {
+
+        }
+    }
+
+    @media (min-width: 640px) {
+        p {
+            font-size: 3rem;
+        }
     }
 </style>
