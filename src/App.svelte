@@ -19,7 +19,6 @@
     let compliment = $state("");
     let displayedImage = $state(serenePool);
     let selectedCategory = $state(sentenceToCamelCase(categories[0])); // defaults to the first category of compliments
-    let isExiting = $state(false); // whether the text is changing or not
     let imageChanged = $state(false); // whether the user has selected another image or not
 
     /**
@@ -27,8 +26,21 @@
      */
     let bgImage = $state();
 
+    /**
+     * @type HTMLParagraphElement
+     */
+    let complimentText = $state();
+
     function generateCompliment() {
-      isExiting = true // start the intermediate animation between generations
+      if (!document.startViewTransition) {
+        if (complimentText) {
+          complimentText.innerText = compliment; // fallback: no animation
+          return;
+        }
+      }
+      document.startViewTransition(() => {
+        complimentText.innerText = compliment;
+      });
 
       // picks a random compliment from the `complimentList` store
       if (selectedCategory !== "random") {
@@ -54,13 +66,11 @@
         >
     </div>
     <p
-        class="{isExiting ? 'fade-in' : ''} pixelify-sans-400"
-        onanimationend={() => {
-          isExiting = false
-        }}
-    >{compliment}</p>
+        bind:this={complimentText}
+        class="pixelify-sans-400"
+    ></p>
     <div class="controls-container">
-        <button disabled={isExiting} onclick={generateCompliment}>Get gassed</button>
+        <button onclick={generateCompliment}>Get gassed</button>
         <ul>
             {#each categories as category (category)}
                 <li><button
@@ -163,25 +173,6 @@
         text-align: center;
         padding-inline: 30px;
         word-wrap: break-word;
-    }
-
-    p.fade-in {
-        animation: fade-in;
-        animation-duration: 300ms;
-    }
-
-    @keyframes fade-in {
-        0% {
-            opacity: 0%;
-        }
-
-        50% {
-            opacity: 10%;
-        }
-
-        100% {
-            opacity: 100%;
-        }
     }
 
     .controls-container > button {
