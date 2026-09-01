@@ -113,6 +113,12 @@
                 {/each}
             </ul>
         </div>
+        <div class="links">
+            <ul>
+                <li><a href="https://github.com/nayaravis/get-gassed">Github</a></li>
+                <!-- <li><a href="https://github.com/nayaravis">by @nayaravis</a></li> -->
+            </ul>
+        </div>
     </div>
 </main>
 
@@ -243,6 +249,26 @@
         user-select: none;
     }
 
+    .links {
+        position: fixed;
+        left: 20px;
+        bottom: 15px;
+        height: fit-content;
+    }
+
+    .links ul {
+        display: flex;
+        padding-block-start: 0;
+    }
+
+    .links ul li a {
+        font-family: "Jersey 25", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        color: #ffffff;
+        text-underline-offset: 5px;
+    }
+
     ul.background-buttons button.selected-image {
         border-color: #ffffff;
     }
@@ -255,6 +281,13 @@
             top: 40px;
             left: 0;
             padding-inline: 10px
+        }
+
+        .links {
+            position: static;
+            left: 0;
+            bottom: 0;
+            padding-block: 10px;
         }
     }
 
