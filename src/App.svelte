@@ -115,7 +115,7 @@
         </div>
         <div class="links">
             <ul>
-                <li><a href="https://github.com/nayaravis/get-gassed">Github</a></li>
+                <li><a href="https://github.com/nayaravis/get-gassed" target="_blank">Github</a></li>
                 <!-- <li><a href="https://github.com/nayaravis">by @nayaravis</a></li> -->
             </ul>
         </div>
@@ -230,6 +230,7 @@
         display: flex;
         align-items: center;
         padding-block-start: 0;
+        padding-inline: 5px;
         height: 50px;
         overflow-x: auto;
     }
@@ -251,7 +252,7 @@
 
     .links {
         position: fixed;
-        left: 20px;
+        left: 25px;
         bottom: 15px;
         height: fit-content;
     }
