@@ -115,8 +115,8 @@
         </div>
         <div class="links">
             <ul>
-                <li><a href="https://github.com/nayaravis/get-gassed" target="_blank">Github</a></li>
-                <!-- <li><a href="https://github.com/nayaravis">by @nayaravis</a></li> -->
+                <li><a href="https://github.com/aynavbar/get-gassed" target="_blank">Github</a></li>
+                <!-- <li><a href="https://github.com/aynavbar">by @nayaravis</a></li> -->
             </ul>
         </div>
     </div>
